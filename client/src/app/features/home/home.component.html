@@ -1,0 +1,124 @@
+<div class="app-layout">
+    <aside class="panel-left">
+        <header class="app-header">
+            <div class="app-logo">
+                <span class="logo-icon">T</span>
+            </div>
+            <div class="app-title">
+                <h1>AI Tech CV Analyzer</h1>
+                <p>Analyze your CV with AI</p>
+            </div>
+        </header>
+
+        <!-- Step 1: Upload CV -->
+         <div class="form-section">
+            <label class="section-label">Step 1: Upload CV</label>
+            @if (selectedFile()) {
+                <div class="file-ready">
+                    <div class="file-icon">PDF</div>
+                    <div class="file-info">
+                        <span class="file-name">{{ selectedFile()!.name}}</span>
+                        <span class="file-meta">
+                            @if (isExtractingPdf()) {
+                                Extracting text...
+                            } @else {
+                                {{ cvText() ? 'Text extracted' : 'Ready to extract text' }}
+                            }
+                        </span>
+                    </div>
+                    <button class="file-remove" (click)="removeFile()">Remove</button>
+                </div>
+            } @else {
+                <div 
+                    class="upload-zone"
+                    [class.drag-over]="isDragOver()"
+                    (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)"
+                    (drop)="onDrop($event)"
+                    (click)="fileInput.click()">
+                    <span class="upload-icon">+</span>
+                    <span class="upload-label">Upload PDF</span>
+                    <span class="upload">or drag and drop</span>
+                </div>
+                <input 
+                    #fileInput
+                    type="file" 
+                    id="cvInput" 
+                    class="file-input" 
+                    style="display: none;"
+                    (change)="onFileSelected($event)" 
+                    accept="application/pdf"/>
+            }
+         </div>
+
+        <!-- Step 2: Pick level -->
+        <div class="form-section">
+            <label class="section-label">Step 2: Pick level</label>
+            <div class="level-pills">
+                @for (level of levels; track level) {
+                    <button 
+                        class="pill" 
+                        [class.active]="selectedLevel() === level"
+                        (click)="selectLevel(level)">
+                        {{ level }}
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Step 3: Job description -->
+        <div class="form-section">
+            <label class="section-label">Step 3: Job description</label>
+            <textarea
+                class="job-textarea"
+                placeholder="Paste the job description here..."
+                (input)="onJobDescriptionChange($event)">
+            </textarea>
+        </div>
+
+
+        <button 
+            class="btn-analyze" 
+            [disabled]="!canAnalyze()"
+            (click)="onAnalyze()">
+            @if (analysisService.isLoading()) {
+                <span class="spinner"></span>
+                Analyzing...
+            } @else if(isExtractingPdf()) {
+                <span class="spinner"></span>
+                Reading CV...
+            } @else {
+                Analyze CV
+            }
+            
+        </button>
+    </aside>
+
+    <!-- Right panel: Analysis results or empty state -->
+    <main class="panel-right">
+        @if (analysisService.hasResult()) {
+            <app-analysis></app-analysis>
+        } @else {
+            <div class="empty-state">
+                <div class="empty-icon">
+                </div>
+                    <h2>Ready to analyze</h2>
+                    <p>Complete the three steps on the left and I'll return a summary, line-by-line fixes.</p>
+                <div class="steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <p>Upload your CV</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <p>Pick level</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <p>Provide job description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </main>
+</div>
