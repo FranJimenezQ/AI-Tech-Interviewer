@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AnalysisService } from '../../core/services/analysis.service';
+import { SuggestedChange} from '../../core/models/analysis.models';
 
 @Component({
   selector: 'app-analysis',
@@ -8,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class AnalysisComponent {
 
+  readonly analysisService = inject(AnalysisService);
+
+  get result() {
+    return this.analysisService.result();
+  }
+
+  onStartOver() {
+    this.analysisService.reset();
+  }
+
+  trackByChangeId(index: number, change: SuggestedChange): number {
+    return change.id;
+  }
 }

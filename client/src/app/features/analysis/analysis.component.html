@@ -1,1 +1,65 @@
-<p>analysis works!</p>
+@if (result) {
+  <div class="analysis-container">
+
+    <!-- Header -->
+    <div class="analysis-header">
+      <div class="analysis-title">
+        <h2>Analysis</h2>
+        <p class="analysis-meta">{{ result.keywords.matched }}/{{ result.keywords.total }} keywords · {{ result.seniorityAlignment }}</p>
+      </div>
+      <button class="btn-start-over" (click)="onStartOver()">
+        Start over
+      </button>
+    </div>
+
+    <!-- Match Summary Card -->
+    <div class="card">
+      <div class="match-summary-header">
+        <h3>Match summary</h3>
+        <div class="fit-score">
+          <span class="fit-number">{{ result.fitScore }}</span>
+          <span class="fit-percent">%</span>
+          <span class="fit-label">FIT SCORE</span>
+        </div>
+      </div>
+
+      <p class="match-summary-text">{{ result.matchSummary }}</p>
+
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric-value">{{ result.keywords.matched }}<span class="metric-total">/{{ result.keywords.total }}</span></span>
+          <span class="metric-label">Keywords matched</span>
+        </div>
+        <div class="metric metric--highlight">
+          <span class="metric-value">{{ result.seniorityAlignment }}</span>
+          <span class="metric-label">Seniority</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ result.formatStatus }}</span>
+          <span class="metric-label">Format & length</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Changes Card -->
+    <div class="card">
+      <div class="changes-header">
+        <h3>Suggested changes</h3>
+        <span class="changes-count">{{ result.suggestedChanges.length }}</span>
+      </div>
+
+      <div class="changes-list">
+        @for (change of result.suggestedChanges; track change.id) {
+          <div class="change-item">
+            <span class="change-number">{{ change.id }}</span>
+            <div class="change-content">
+              <p class="change-title">{{ change.title }}</p>
+              <p class="change-description">{{ change.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+}

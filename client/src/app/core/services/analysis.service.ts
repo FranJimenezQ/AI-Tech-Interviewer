@@ -16,7 +16,7 @@ export class AnalysisService {
     });
 
     readonly isLoading = computed(() => this.analysisState().isLoading);
-    readonly analysisResult = computed(() => this.analysisState().result);
+    readonly result = computed(() => this.analysisState().result);
     readonly error = computed(() => this.analysisState().error);
     readonly hasResult = computed(() => !!this.analysisState().result);
     
