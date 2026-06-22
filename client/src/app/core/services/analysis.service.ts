@@ -1,13 +1,14 @@
 import {Injectable, signal, computed} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { AnalysisRequest, AnalysisResult, AnalysisState, SeniorityLevel } from '../models/analysis.models';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AnalysisService {
 
-    private readonly apiUrl = 'api/analyze'; // Replace with your actual API endpoint
+    private readonly apiUrl = '${environment.apiUrl}/api/analyze';
 
     private readonly analysisState = signal<AnalysisState>({
         isLoading: false,
