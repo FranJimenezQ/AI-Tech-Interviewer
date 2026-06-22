@@ -2,20 +2,23 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { AnalysisService } from '../../core/services/analysis.service';
 import { AnalysisComponent } from '../analysis/analysis.component';
 import { SeniorityLevel } from '../../core/models/analysis.models';
+import { Router } from '@angular/router'; 
 
 //import from pdfjslib
 import * as pdfjsLib from 'pdfjs-dist';
+import { SkeletonComponent } from '../../shared/components/skeleton/skeleton.component';
 //pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
 @Component({
   selector: 'app-home',
-  imports: [AnalysisComponent],
+  imports: [AnalysisComponent, SkeletonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   readonly analysisService = inject(AnalysisService);
+  private readonly router = inject(Router);
 
   //Local state for form with signals
   readonly selectedFile = signal<File | null>(null);
@@ -123,10 +126,16 @@ export class HomeComponent {
       alert('Please fill in all required fields and ensure no analysis is currently running.');
       return;
     }
+
+    const isMobile = window.innerWidth <= 768;
+    
     this.analysisService.analyze(
       this.cvText(),
       this.selectedLevel(),
       this.jobDescription()
     );
+    if (isMobile) {
+      this.router.navigate(['/analysis']);
+    }
   }
 }

@@ -207,3 +207,56 @@
     }
   }
 }
+
+// Mobile header
+.mobile-header {
+  display: none;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+
+  .mobile-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 768px) {
+  .analysis-container {
+    padding: 20px 16px;
+  }
+
+  .mobile-header {
+    display: flex;
+  }
+
+  .analysis-header {
+    display: none; 
+  }
+
+  .metrics {
+    grid-template-columns: 1fr; 
+    gap: 8px;
+  }
+
+  .fit-score {
+    .fit-number {
+      font-size: 28px;
+    }
+  }
+}

@@ -96,7 +96,23 @@
 
     <!-- Right panel: Analysis results or empty state -->
     <main class="panel-right">
-        @if (analysisService.hasResult()) {
+        @if (analysisService.isLoading()) {
+            <div class="empty-state">
+                <app-skeleton></app-skeleton>
+                <h2>Analyzing your CV...</h2>
+                <p>This might take a few seconds...</p>
+            </div>
+        } @else if (analysisService.error()) {
+            <div class="empty-state error-state">
+                <div class="error-icon">!</div>
+                <h2>Something went wrong</h2>
+                <p class="error-message">{{ analysisService.error() }}</p>
+                <p>Sorry, something went wrong while analyzing your CV. Please try again.</p>
+                <button class="btn-start-over" (click)="analysisService.reset()">
+                    Start over
+                </button>
+            </div>
+        } @else if (analysisService.hasResult()) {
             <app-analysis></app-analysis>
         } @else {
             <div class="empty-state">
