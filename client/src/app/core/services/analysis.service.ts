@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AnalysisService {
 
-    private readonly apiUrl = '${environment.apiUrl}/api/analyze';
+    private readonly apiUrl = `${environment.apiUrl}/api/analyze`;
 
     private readonly analysisState = signal<AnalysisState>({
         isLoading: false,
