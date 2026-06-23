@@ -5,6 +5,15 @@ const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
 
+const corsHeaders = {
+    'Access-Control-Allow-Origin': 'https://ai-tech-interviewer-iota.vercel.app',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+    return NextResponse.json({}, { headers: corsHeaders });
+}
 const SYSTEM_PROMPT = `You are an expert CV/resume analyst and career coach. 
 Your job is to analyze a candidate's CV against a job description and provide detailed, actionable feedback.
 
@@ -45,14 +54,14 @@ export async function POST(req: NextRequest) {
         if (!cvText || !level || !jobDescription) {
             return NextResponse.json(
                 { message: 'Missing required fields: cvText, level, jobDescription' }, 
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
         if (cvText.length < 100) {
             return NextResponse.json(
                 { message: 'CV text is too short to analyze. Please provide a more detailed CV.' }, 
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
         const userMessage = `
@@ -89,13 +98,16 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        return NextResponse.json(analysisResult, { status: 200 });
+        return NextResponse.json(analysisResult, { 
+            status: 200,
+            headers: corsHeaders 
+        });
 
     } catch (error: any) {
         console.error('Error in analysis route:', error);
         return NextResponse.json(
             { message: error.message || 'An error occurred while processing the analysis.' }, 
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }
